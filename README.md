@@ -6,7 +6,7 @@ A procedural, interactive five-store portfolio prototype built with **Next.js Ap
 
 ## Run locally
 
-Requires Node.js 20.9+ and npm. Install with `npm install`, then start with `npm run dev` and open http://localhost:3000. A VS Code task, **Portfolio: development server**, is also included.
+Use Node.js 22 LTS (specified in `.nvmrc`) and npm to match the Netlify build environment. Next.js requires at least Node.js 20.9. Install with `npm install`, then start with `npm run dev` and open http://localhost:3000. A VS Code task, **Portfolio: development server**, is also included.
 
 | Script | Purpose |
 | --- | --- |
@@ -18,6 +18,37 @@ Requires Node.js 20.9+ and npm. Install with `npm install`, then start with `npm
 | `npm test` | Playwright desktop and mobile regression tests |
 
 For a fresh test setup, install Chromium with `npx playwright install chromium`, run `npm run build`, then `npm test`. Playwright starts a production server automatically, or reuses an existing local server on port 3000. Browser screenshots and failure traces are saved to the ignored `test-results/` directory.
+
+## Deploy to Netlify from GitHub
+
+Commit and push the repository, including `netlify.toml`, `.nvmrc`, and `package-lock.json`. In Netlify, import the GitHub repository (or use the existing connected project) and deploy the `main` branch.
+
+The checked-in configuration sets:
+
+| Setting | Value |
+| --- | --- |
+| Framework | Next.js |
+| Base directory | Repository root (`.`); leave the UI field empty |
+| Package directory | Leave empty; this is not a monorepo |
+| Build command | `npm run build` |
+| Publish directory | `.next` |
+| Node.js | 22 LTS |
+| Next.js runtime | `@netlify/plugin-nextjs` (current adapter, not version-pinned) |
+
+Netlify installs the dependencies, builds Next.js, and uses its OpenNext adapter to deploy the pages, assets, and routing. No application secrets are needed for this iteration. Do not set `NODE_ENV=production` during dependency installation, because the build needs the development dependencies too.
+
+### A successful deploy shows Netlify's “Page not found”
+
+That page is a hosting/routing 404, not a Three.js rendering failure. Common causes are publishing the repository or the wrong output folder, skipping the Next.js adapter, deploying an old commit, or opening a URL belonging to another project. A successful upload alone does not prove that the homepage was deployed.
+
+1. Push the deployment configuration to the branch connected to Netlify, then check that the new deploy uses that commit. Repository configuration cannot affect an already-published deploy.
+2. Confirm the settings above under **Project configuration → Build & deploy / Continuous deployment**. Clear any incorrect package-directory setting.
+3. If present, remove `NETLIFY_NEXT_PLUGIN_SKIP=true` or a manually pinned legacy Next.js runtime. The deployment log should identify the root `netlify.toml`, run `next build`, and execute `@netlify/plugin-nextjs`.
+4. Use **Deploys → Trigger deploy → Clear cache and deploy site** (or the equivalent retry-with-cleared-cache option), and open the published production deploy's root URL.
+
+Do not publish `.next/static` by itself: it contains assets, not the application routes. This project is also not configured for static export, so `out`, `dist`, `build`, and `public` are not its publish directory. Do not add a catch-all `/* /index.html 200` SPA rewrite; the Next.js adapter owns routing. Build output stays gitignored and is generated on Netlify.
+
+If the 404 remains, inspect the exact deploy URL, resolved build settings, and adapter section of its deployment log rather than changing the 3D components. See [Next.js on Netlify](https://docs.netlify.com/build/frameworks/framework-setup-guides/nextjs/overview/) and [the OpenNext configuration guide](https://opennext.js.org/netlify).
 
 ## Explore
 

@@ -1,0 +1,13 @@
+# This is a Next.js app, not a Vite/CRA static build.
+[build]
+  base = "."
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# Let Netlify install the current Next.js/OpenNext adapter without pinning it
+# in package.json. The adapter provides the routes for the .next output.
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
