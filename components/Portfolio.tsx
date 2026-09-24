@@ -13,6 +13,7 @@ import InformationPanel from "./ui/InformationPanel";
 import SceneBoundary from "./scene/SceneBoundary";
 import { storeIcons } from "./ui/icons";
 import StoreLabel from "./ui/StoreLabel";
+import RoomContent, { RoomHeading } from "./ui/RoomContent";
 
 const PortfolioScene = dynamic(() => import("./scene/PortfolioScene"), { ssr: false });
 
@@ -30,8 +31,23 @@ export default function Portfolio() {
   const overview = useCallback(() => dispatch({ type: "overview" }), []);
   const store = state.storeId ? storeById[state.storeId] : null;
   const item = store?.items.find((entry) => entry.id === state.itemId);
-  const hasPanel = !!store || !!state.information;
   const simplified = unavailable || listMode;
+  const hasPanel = !!item || !!state.information || (simplified && !!store);
+  const inRoom = state.view === "interior" || state.view === "leaving";
+  const transitioning = state.view === "entering" || state.view === "leaving";
+
+  useEffect(() => {
+    if (!transitioning) return;
+    const duration = state.view === "entering" ? 850 : 450;
+    const timer = window.setTimeout(() => dispatch({ type: "transition-complete", revision: state.transitionRevision }), reducedMotion || simplified ? 0 : duration);
+    return () => window.clearTimeout(timer);
+  }, [transitioning, state.view, state.transitionRevision, reducedMotion, simplified]);
+
+  useEffect(() => {
+    if (state.view === "exterior" && state.transitionRevision > 0 && !state.information) {
+      document.querySelector<HTMLButtonElement>("[data-directory-toggle]")?.focus({ preventScroll: true });
+    }
+  }, [state.view, state.transitionRevision, state.information]);
 
   useEffect(() => {
     const escape = (event: KeyboardEvent) => {
@@ -46,18 +62,19 @@ export default function Portfolio() {
     return () => window.removeEventListener("keydown", escape);
   }, [state.directoryOpen, state.itemId, overview]);
 
-  return <main className={`portfolio ${hasPanel ? "has-panel" : ""} ${simplified ? "is-simplified" : ""}`}>
+  return <main className={`portfolio ${hasPanel ? "has-panel" : ""} ${simplified ? "is-simplified" : ""} ${inRoom && !simplified ? "in-room" : ""}`} data-view={state.view}>
     <a className="skip-link" href="#explore-button">Skip to portfolio navigation</a>
     <div className="world-backdrop" aria-hidden="true" /><div className="grain" aria-hidden="true" />
     <header className="identity"><button className="identity-mark" onClick={overview} aria-label="Shanit Paul — building overview">sp<span>.</span></button><div><span className="identity-name">{profile.name}</span><span className="identity-caption">A LITTLE WORLD OF MY OWN</span></div></header>
     <div className="night-status"><Moon size={13} /><span>AFTER HOURS</span><span className="night-divider" /><span className="open-indicator" /><span>ALWAYS EXPLORING</span></div>
 
     {!simplified && <div className="scene" aria-label="Interactive miniature neighborhood. Use the directory for keyboard navigation." data-testid="scene" data-ready={ready}>
-      <SceneBoundary onUnavailable={onUnavailable}><PortfolioScene selected={state.storeId} revision={state.overviewRevision} reducedMotion={reducedMotion} onVisit={visit} onItem={openItem} onHover={setHovered} onReady={onReady} onUnavailable={onUnavailable} /></SceneBoundary>
-      {ready && !hasPanel && <div className="scene-labels">{stores.map((entry) => <div key={entry.id} id={`store-marker-${entry.id}`} className="projected-label"><StoreLabel store={entry} hovered={hovered === entry.id} selected={false} onVisit={() => visit(entry.id)} /></div>)}</div>}
+      <SceneBoundary onUnavailable={onUnavailable}><PortfolioScene selected={state.storeId} view={state.view} revision={state.overviewRevision} reducedMotion={reducedMotion} onVisit={visit} onItem={openItem} onHover={setHovered} onReady={onReady} onUnavailable={onUnavailable} /></SceneBoundary>
+      {ready && state.view === "exterior" && !hasPanel && <div className="scene-labels">{stores.map((entry) => <div key={entry.id} id={`store-marker-${entry.id}`} className="projected-label"><StoreLabel store={entry} hovered={hovered === entry.id} selected={false} onVisit={() => visit(entry.id)} /></div>)}</div>}
+      {inRoom && store && <RoomContent key={store.id} store={store} onItem={(id) => openItem(store.id, id)} blocked={hasPanel || state.directoryOpen || transitioning} />}
     </div>}
 
-    {!hasPanel && !simplified && <section className="intro" aria-label="Welcome to After Hours">
+    {!hasPanel && !simplified && state.view === "exterior" && <section className="intro" aria-label="Welcome to After Hours">
       <span className="eyebrow"><span className="tiny-rule" /> WELCOME TO MY CORNER</span>
       <h1>One building.<br />Many <em>worlds.</em></h1>
       <p>A few things I build.<br />A few things I love.<br />All under one roof.</p>
@@ -73,8 +90,11 @@ export default function Portfolio() {
       <div className="simplified-grid">{stores.map((entry) => { const Icon = storeIcons[entry.id]; return <button key={entry.id} onClick={() => visit(entry.id)} style={{ "--store-color": entry.color } as React.CSSProperties}><span>{entry.number} / {entry.floor}</span><Icon size={30} strokeWidth={1.2} /><strong>{entry.name}</strong><span>{entry.category} <ArrowUpRight size={15} /></span></button>; })}</div>
     </section>}
 
-    {hasPanel && <button className="overview-button" onClick={overview}><ArrowLeft size={15} /><span>Back to building</span></button>}
-    {store && <PortfolioPanel key={store.id} store={store} item={item} onItem={(itemId) => openItem(store.id, itemId)} onCloseItem={() => dispatch({ type: "close-item" })} onOverview={overview} />}
+    {(store || state.information) && <button className="overview-button" onClick={overview}><ArrowLeft size={15} /><span>Back to building</span></button>}
+    {inRoom && store && !simplified && <RoomHeading key={`heading-${store.id}`} store={store} />}
+    {!simplified && <div key={`${state.view}-${state.transitionRevision}`} className={`portal-curtain portal-${state.view}`} aria-hidden="true" />}
+    {transitioning && !simplified && <span className="transition-status" role="status">{state.view === "entering" ? `Entering ${store?.name}…` : "Returning to the building…"}</span>}
+    {store && (item || simplified) && <PortfolioPanel key={`panel-${store.id}`} store={store} item={item} onItem={(itemId) => openItem(store.id, itemId)} onCloseItem={() => dispatch({ type: "close-item" })} onOverview={overview} />}
     {state.information && <InformationPanel page={state.information} onClose={overview} />}
     <Navigation open={state.directoryOpen} selected={state.storeId} onVisit={visit} onInformation={(page) => dispatch({ type: "information", page })} onClose={() => { dispatch({ type: "directory", open: false }); document.querySelector<HTMLButtonElement>("[data-directory-toggle]")?.focus(); }} />
 

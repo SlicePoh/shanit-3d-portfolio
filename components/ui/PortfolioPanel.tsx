@@ -12,15 +12,27 @@ export default function PortfolioPanel({ store, item, onItem, onCloseItem, onOve
 }) {
   const close = useRef<HTMLButtonElement>(null);
   const scroll = useRef<HTMLDivElement>(null);
+  const trigger = useRef<HTMLElement | null>(null);
+  useEffect(() => {
+    if (item) trigger.current = document.querySelector<HTMLElement>(`[data-room-item="${item.id}"]`);
+  }, [item]);
   useEffect(() => {
     const previous = document.activeElement as HTMLElement | null;
     close.current?.focus({ preventScroll: true });
-    return () => { if (previous?.isConnected) previous.focus({ preventScroll: true }); else document.querySelector<HTMLButtonElement>("[data-directory-toggle]")?.focus({ preventScroll: true }); };
+    return () => {
+      // Making the room inert may already have blurred the selected physical object.
+      const target = trigger.current?.isConnected ? trigger.current : previous;
+      if (target?.isConnected) target.focus({ preventScroll: true });
+      else document.querySelector<HTMLButtonElement>("[data-directory-toggle]")?.focus({ preventScroll: true });
+    };
   }, [store.id]);
-  useEffect(() => { scroll.current?.scrollTo(0, 0); }, [item?.id]);
+  useEffect(() => {
+    scroll.current?.scrollTo(0, 0);
+    if (item?.id) close.current?.focus({ preventScroll: true });
+  }, [item?.id]);
   const Icon = storeIcons[store.id];
   return <section className={`portfolio-panel theme-${store.id}`} role="dialog" aria-labelledby="panel-title" style={{ "--store-color": store.color } as React.CSSProperties}>
-    <div className="panel-topline"><span className="eyebrow"><span className="status-dot" /> {store.floor}</span><button ref={close} className="icon-button" onClick={onOverview} aria-label="Close panel and return to building"><X size={18} /></button></div>
+    <div className="panel-topline"><span className="eyebrow"><span className="status-dot" /> {store.floor}</span><button ref={close} className="icon-button" onClick={item ? onCloseItem : onOverview} aria-label={item ? "Close details and return to room" : "Close panel and return to building"}><X size={18} /></button></div>
     <div className="panel-scroll" ref={scroll}>
       <button className="text-back" onClick={item ? onCloseItem : onOverview}><ArrowLeft size={14} /> {item ? `Back to ${store.name}` : "Back to building"}</button>
       <div className="panel-symbol"><Icon size={30} strokeWidth={1.2} /><span>{store.number} / {store.category.toUpperCase()}</span></div>
@@ -36,10 +48,11 @@ export default function PortfolioPanel({ store, item, onItem, onCloseItem, onOve
             <span className="menu-item-copy"><small>{entry.label}</small><strong>{entry.title}</strong>{store.id === "music" && <span>{entry.subtitle}</span>}</span>
             <ArrowUpRight size={17} />
           </button>)}
+          {store.items.length === 0 && <p className="item-description">{store.description}</p>}
           <p className="menu-footer">{store.invitation}</p>
         </div>
         {store.id === "music" && <p className="interests-note"><span>ON THE SHOP PLAYLIST</span>{musicInterests.join(" · ")}</p>}
-        <p className="shop-note">You can also explore the objects in the shop.</p>
+        <p className="shop-note">All available resume content is included in this view.</p>
       </>}
     </div>
     <div className="panel-footer"><span>SHANIT’S LITTLE NEIGHBORHOOD</span><span>EST. 2026</span></div>

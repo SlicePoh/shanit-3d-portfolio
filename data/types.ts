@@ -14,6 +14,9 @@ export interface PortfolioItem {
   link?: string;
   label?: string;
   prototype?: boolean;
+  date?: string;
+  company?: string;
+  kind?: string;
 }
 
 export interface Store {
@@ -27,6 +30,7 @@ export interface Store {
   invitation: string;
   color: string;
   position: Vector3Tuple;
+  rotation: Vector3Tuple;
   scale: Vector3Tuple;
   items: PortfolioItem[];
 }

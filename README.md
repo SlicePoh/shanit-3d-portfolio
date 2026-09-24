@@ -2,7 +2,7 @@
 
 A 3D portfolio for meeeeeeeeeeeeeee. Now a miniature neighborhood, open all night.
 
-A procedural, interactive five-store portfolio prototype built with **Next.js App Router, React, TypeScript, React Three Fiber, Drei, Three.js, and Tailwind CSS**. No external models, textures, album covers, logos, font downloads, or copyrighted character artwork.
+A procedural, interactive five-store portfolio built with **Next.js App Router, React, TypeScript, React Three Fiber, Drei, Three.js, and Tailwind CSS**. Each storefront leads into an independent, explorable 3D room. The supplied resume is its primary content; personal interests are secondary environmental details. Models are procedural, with optional local artwork supplied by the owner. No remote fonts, character models, or album-art downloads.
 
 ## Run locally
 
@@ -11,6 +11,7 @@ Use Node.js 22 LTS (specified in `.nvmrc`) and npm to match the Netlify build en
 | Script | Purpose |
 | --- | --- |
 | `npm run dev` | Development server |
+| `npm run content` | Generate typed-consumed resume data and prepare optional local artwork |
 | `npm run build` | Type-checked production build |
 | `npm start` | Serve the production build |
 | `npm run lint` | ESLint / React hooks checks |
@@ -52,29 +53,27 @@ If the 404 remains, inspect the exact deploy URL, resolved build settings, and a
 
 ## Explore
 
-- **Shinobi Ramen → Projects:** a paper menu of Shinobi Tracker, MemBlock, and Vewrite.
-- **Club 1899 → Achievements:** representative jerseys and an interactive trophy cabinet. No official club branding.
-- **The Westeros Archive → Experience:** an original fictional atlas and career exhibits, not a reproduction of an existing map or asset.
-- **B-Side Records → Skills:** physical record sleeves for eleven languages and technologies.
-- **Midnight Manga → Experiments:** original book spines and an experimental-project shelf.
+- **Shinobi Ramen → Projects:** a physical menu for MemBlock, Shinobi Tracker, and Vewrite, with a counter, bowls and lanterns.
+- **FC Barcelona Sports Store → Achievements:** Rising Star trophy, technical-writing programme, six clickable certificates, and secondary jerseys.
+- **Westeros Museum → Experience:** three chronological exhibits containing all 36 top-level resume bullets, including the nested filter dimensions. Supplied map and abstract medieval artifacts remain secondary.
+- **Music Store & Vinyl → Skills:** all 42 skills in four clearly separated wall sections, with records, guitar, violin, piano, harmonium and supplied music artwork.
+- **Midnight Manga → Placeholder:** its original attic position and the shared interior architecture are preserved. Final content is intentionally deferred.
 
-Hover a store for its label and an emissive edge. Click a facade or its label to focus the orthographic camera. Store menus open readable HTML detail panels, keeping the world visible. Records, museum exhibits, the trophy, and selected project/book cards are also clickable.
+Hover a store for its label and a subtle emissive edge. Click its facade, label, or directory entry to zoom toward the storefront and transition into its room. No detail panel opens on entry. Select the physical menu, skills group, experience plaque, award, or certificate to open its full details. Closing details returns to the room, not the building.
 
-Drag to orbit within constrained angles; scroll/pinch to zoom. **Back to building** or the reset button returns to the overview. **Escape** closes the directory, backs out of an item, or returns to the building. The directory is keyboard accessible and includes Education and About. Panels are non-modal so the scene and directory remain usable.
+Drag to orbit the whole building, including its opposite-facing stores; room orbit is constrained to keep the content wall in view. Scroll/pinch to zoom. **Back to building** returns to the exterior. **Escape** closes the directory, backs out of a detail, or exits/cancels a room. The compact HTML directory includes Education and About. A simplified view retains all content without WebGL.
 
 ## Architecture
 
-- `data/types.ts`: portfolio item, store, and category contracts.
-- `data/stores.ts`: store transforms, visual accents, content mapping, and profile text.
-- `data/projects.ts`, `experience.ts`, `skills.ts`, `achievements.ts`: structured content, not embedded in presentation components.
-- `lib/navigation.ts`: pure, renderer-independent navigation reducer.
-- `components/Portfolio.tsx`: application state, dynamic scene loading, HTML shell, directory, and fallback.
-- `components/scene/Building.tsx`: store renderer registry and shared building utilities.
-- `components/scene/Store.tsx`: reusable procedural shell and `StoreRendererProps` adapter contract.
-- Individual scene renderers: architecture and sparse representative props for each shop.
-- `components/scene/CameraRig.tsx`: damped focus/overview transitions, responsive framing, constrained orbit.
-- `components/scene/LabelProjection.tsx`: projects anchors into the main HTML tree; avoids extra React roots.
-- `components/ui/`: accessible HTML menus and category-specific detail panels.
+- [content/projects.md](content/projects.md), [content/skills.md](content/skills.md), [content/experience.md](content/experience.md), [content/achievements.md](content/achievements.md): canonical resume content, outside the 3D components.
+- [scripts/prepare-content.mjs](scripts/prepare-content.mjs): parses Markdown using `marked`, validates IDs and HTTP(S) links, generates [data/resume.json](data/resume.json), and copies supplied artwork. Runs before development, builds and tests. After editing Markdown during an active development session, run `npm run content` again (or restart the server).
+- [data/stores.ts](data/stores.ts): exterior positions/rotations, content mapping, and profile information.
+- [data/rooms.ts](data/rooms.ts): reusable room camera presets and responsive physical-display layout.
+- [lib/navigation.ts](lib/navigation.ts): exterior → entering → interior → leaving state machine. Revision tokens discard stale transitions after cancellation or a new selection.
+- [components/scene/rooms/RoomScene.tsx](components/scene/rooms/RoomScene.tsx): shared room shell, lighting, displays and themed decoration.
+- [components/scene/CameraRig.tsx](components/scene/CameraRig.tsx): responsive exterior and interior framing, smooth interpolation, bounded room orbit.
+- [components/scene/rooms/RoomSurfaces.tsx](components/scene/rooms/RoomSurfaces.tsx): projects three corners of each physical frame into a CSS affine transform. Accessible HTML typography follows the actual 3D plane without extra React roots.
+- [components/ui/RoomContent.tsx](components/ui/RoomContent.tsx): keyboard-operable physical display faces. Details remain separate, readable, scrollable HTML.
 
 ### Replacing geometry with Spline assets
 
@@ -82,23 +81,25 @@ Keep the store IDs, local origin at floor-center, `StoreRendererProps`, and cont
 
 ## Content status
 
-**This is a prototype, not a verified résumé.** Names and interests supplied in the brief are represented, but job dates, education credentials, award details, project results, and repository/demo URLs were not supplied. Missing details are explicitly identified as prototype entries, and missing external links are disabled instead of pointing to fabricated destinations. Replace those entries before publishing. The skill descriptions describe the technologies, not an asserted proficiency level.
+The supplied resume Markdown has replaced the prototype projects, skills, experience and achievements. Dates and every experience bullet are preserved. Project repository/demo URLs and credential URLs were **not supplied**: placeholders never become live links. Add bare HTTP(S) URLs or Markdown links to the relevant metadata fields and regenerate content. Education credentials are still explicitly unspecified; no degree, institution or graduation date has been invented.
+
+The original update documents and visual references remain untouched. Four provided images (Barcelona, Westeros map, Queen and Seedhe Maut) are copied to local public artwork by the preparation script. They are secondary room props, not the primary content. Missing optional source images leave procedural decoration in place. No sea-otter asset was present. Verify permission to publicly distribute supplied third-party artwork before deployment.
 
 ## Rendering and responsiveness
 
-- One lazy-loaded WebGL scene, demand-driven rendering, and bounded pixel ratio (1–1.5).
+- One lazy-loaded WebGL canvas, demand-driven rendering, and bounded pixel ratio (1–1.5). Only the exterior or the active room is mounted.
 - Shared box geometry/materials; instanced books, bricks, and pavement.
-- One shadow-casting directional light with a 1024px map, a non-shadowing fill, and three short-range warm accent lights.
-- A one-frame low-resolution contact-shadow pass; no continuous post-processing, particle systems, or external asset loading.
-- Additional records and item labels mount only when their shop is selected. The complete interiors remain intentionally sparse for this first version.
+- One shadow-casting directional light with a 1024px map; short-range room lamps do not cast extra shadows.
+- An exterior-only one-frame contact-shadow pass; no continuous post-processing or particle systems.
+- Mobile uses narrower/taller skill and certificate walls and vertically arranged museum plaques; no resume skills are omitted to fit.
 - Reduced-motion preference skips camera/CSS animation; no autoplay audio.
 - Mobile uses compact shop markers and scrollable bottom sheets, with an optional simplified HTML presentation on every screen.
 - WebGL initialization failures and context loss switch automatically to the complete HTML directory view.
 
 ## Tests
 
-The Playwright suite covers data invariants, all five stores, project/experience/skill panels, back/Escape behavior, keyboard access and focus restoration, reduced motion, the simplified presentation, forced WebGL failure, overflow, and direct mesh picking plus orbit/zoom/reset. Chromium runs with software WebGL in tests to keep them usable in GPU-less environments. This is not a substitute for profiling on a physical low-end mobile device.
+The Playwright suite covers original-source content completeness, opposite storefront orientations, the preserved attic, entry/exit and cancellation, all room frames, all six certificates, detail focus restoration, reduced motion, simplified mode, forced WebGL failure, and direct exterior mesh picking/orbit/zoom/reset. Room screenshots are captured for desktop and mobile. Chromium uses software WebGL; physical-device performance and manual artwork review remain separate checks. For an isolated production check while development runs on port 3000, set `PLAYWRIGHT_PORT=3100` when running the tests after a build.
 
 ## Prototype scope
 
-The focus is composition, lighting, modular architecture, camera motion, and working discovery flows. High-detail interiors, real résumé content, analytics, contact submission, audio, post-processing bloom/SSAO, and actual Spline integration are intentionally left for future iterations.
+The five-room architecture and four resume rooms are implemented. Final manga content, unspecified education details/URLs, analytics, contact submission, audio, post-processing bloom/SSAO, and actual Spline integration are left for future iterations.

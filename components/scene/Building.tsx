@@ -9,6 +9,7 @@ import WesterosMuseum from "./WesterosMuseum";
 import MangaShop from "./MangaShop";
 import StoreInteraction from "./StoreInteraction";
 import { Block, Cylinder, Plant, Sign } from "./primitives";
+import Windows from "./Windows";
 import type { StoreRendererProps } from "./Store";
 
 const renderers: Record<StoreId, React.ComponentType<StoreRendererProps>> = {
@@ -47,8 +48,8 @@ function Utilities() {
   </group>;
 }
 
-export default function Building({ selected, onVisit, onItem, onHover }: {
-  selected: StoreId | null; onVisit: (id: StoreId) => void; onItem: (storeId: StoreId, itemId: string) => void; onHover: (id: StoreId | null) => void;
+export default function Building({ selected, onVisit, onHover }: {
+  selected: StoreId | null; onVisit: (id: StoreId) => void; onHover: (id: StoreId | null) => void;
 }) {
   const [hovered, setHovered] = useState<StoreId | null>(null);
   useCursor(hovered !== null);
@@ -56,9 +57,19 @@ export default function Building({ selected, onVisit, onItem, onHover }: {
     {stores.map((store) => {
       const Renderer = renderers[store.id];
       return <StoreInteraction key={store.id} store={store} selected={selected === store.id} hovered={hovered === store.id} onHover={(over) => { setHovered(over ? store.id : null); onHover(over ? store.id : null); }} onVisit={() => onVisit(store.id)}>
-        <Renderer store={store} selected={selected === store.id} onItem={(itemId) => onItem(store.id, itemId)} />
+        <Renderer store={store} selected={false} onItem={() => onVisit(store.id)} />
       </StoreInteraction>;
     })}
+    {/* Inhabited, staggered upper floors support the preserved attic. */}
+    {[{ y: 5.13, x: -0.45, color: "#755347", angle: -0.08 }, { y: 7.2, x: 0.1, color: "#4e6260", angle: 0.07 }].map(({ y, x, color, angle }) => <group key={y} position={[x, y, -0.5]} rotation={[0, angle, 0]}>
+      <Block size={[3.8, 1.95, 3]} position={[0, 0.96, 0]} color={color} />
+      <group position={[0, 0, 0.5]}><Windows width={3.8} height={1.95} depth={3} color="#e6b66c" divisions={3} /></group>
+      <group rotation={[0, Math.PI / 2, 0]}><group position={[0, 0, 0.5]}><Windows width={3} height={1.95} depth={3.8} color="#cd9b61" divisions={2} /></group></group>
+      <Block size={[4, 0.08, 0.5]} position={[0, 0.35, 1.75]} color="#3c4441" />
+      {[-1.85, 0, 1.85].map((post) => <Block key={post} size={[0.035, 0.6, 0.035]} position={[post, 0.65, 1.98]} color="#737366" />)}
+      <Block size={[3.75, 0.035, 0.035]} position={[0, 0.93, 1.98]} color="#737366" />
+      <Block size={[4.05, 0.14, 3.3]} position={[0, 2.0, 0]} color="#494c45" />
+    </group>)}
     <Utilities />
   </group>;
 }

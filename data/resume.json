@@ -1,0 +1,318 @@
+{
+  "projects": [
+    {
+      "id": "memblock",
+      "title": "MemBlock",
+      "category": "Projects",
+      "subtitle": "VS Code Extension · March 2026",
+      "description": "A VS Code extension that retains knowledge for developers using GitHub Copilot by saving code snippets and notes from existing/ongoing chat sessions to use as memory context.\n\nIt provides a local-first memory engine with configurable review scheduling, Markdown-based flashcard support, and seamless editor integration, enabling developers to retain concepts without leaving their coding workflow.",
+      "label": "CHEF'S PICK",
+      "date": "March 2026",
+      "technologies": [
+        "JavaScript",
+        "VS Code Extension API"
+      ],
+      "highlights": [
+        "A VS Code extension for retaining knowledge during development.",
+        "Saves code snippets and notes from existing/ongoing GitHub Copilot chat sessions for later use as memory context.",
+        "Local-first memory engine.",
+        "Configurable review scheduling.",
+        "Markdown-based flashcard support.",
+        "Seamless editor integration."
+      ]
+    },
+    {
+      "id": "shinobi-tracker",
+      "title": "Shinobi Tracker",
+      "category": "Projects",
+      "subtitle": "Real-time hand-sign recognition game · February 2026 -- Ongoing",
+      "description": "A real-time hand-sign recognition game based on Naruto using webcam hand landmark tracking, feature extraction, and custom sign classification to detect hand gestures.",
+      "label": "HOUSE SPECIAL",
+      "date": "February 2026 -- Ongoing",
+      "technologies": [
+        "MediaPipe",
+        "Machine Learning",
+        "Computer Vision",
+        "React",
+        "TypeScript",
+        "Zustand",
+        "Three.js"
+      ],
+      "highlights": [
+        "Real-time hand sign recognition using webcam hand landmark tracking.",
+        "Feature extraction for hand gestures.",
+        "Custom sign classification to detect hand gestures.",
+        "Machine-learning pipeline for dataset handling.",
+        "Feature engineering.",
+        "Model training and model export.",
+        "Browser-side sign inference.",
+        "Visual feedback connecting browser-side detection with the game experience."
+      ]
+    },
+    {
+      "id": "vewrite",
+      "title": "Vewrite",
+      "category": "Projects",
+      "subtitle": "Content-writing platform · September 2023 -- October 2023",
+      "description": "A site designed to give content writers an exclusive platform where they can write, edit, store, and showcase their work.\n\nThe platform provides a dedicated space for content writers to create, edit, store and showcase their work.",
+      "label": "FRESHLY MADE",
+      "date": "September 2023 -- October 2023",
+      "technologies": [
+        "React",
+        "Firebase",
+        "Quill.js"
+      ],
+      "highlights": [
+        "Creating drafts",
+        "Real-time collaboration",
+        "Text editing",
+        "Draft management",
+        "User profile"
+      ]
+    }
+  ],
+  "skills": [
+    {
+      "id": "programming-languages",
+      "title": "Programming Languages",
+      "category": "Skills",
+      "subtitle": "",
+      "description": "TypeScript · JavaScript · Python · Rust · Java",
+      "label": "SIDE A / LANGUAGES",
+      "technologies": [
+        "TypeScript",
+        "JavaScript",
+        "Python",
+        "Rust",
+        "Java"
+      ]
+    },
+    {
+      "id": "frontend",
+      "title": "Frontend",
+      "category": "Skills",
+      "subtitle": "",
+      "description": "React · Angular · HTML · CSS · Redux · GSAP · Jinja2 · Webpack · Highcharts · Chart.js · D3 · Mapbox · Bootstrap · Three.js · R3F.js · AOS",
+      "label": "SIDE B / FRONTEND",
+      "technologies": [
+        "React",
+        "Angular",
+        "HTML",
+        "CSS",
+        "Redux",
+        "GSAP",
+        "Jinja2",
+        "Webpack",
+        "Highcharts",
+        "Chart.js",
+        "D3",
+        "Mapbox",
+        "Bootstrap",
+        "Three.js",
+        "R3F.js",
+        "AOS"
+      ]
+    },
+    {
+      "id": "backend-and-database",
+      "title": "Backend and Database",
+      "category": "Skills",
+      "subtitle": "",
+      "description": "Node.js · AWS · Express · REST API · SQL · Postgres · Firebase · Flask · MongoDB · EC2 · S3",
+      "label": "SIDE C / BACKEND",
+      "technologies": [
+        "Node.js",
+        "AWS",
+        "Express",
+        "REST API",
+        "SQL",
+        "Postgres",
+        "Firebase",
+        "Flask",
+        "MongoDB",
+        "EC2",
+        "S3"
+      ]
+    },
+    {
+      "id": "others",
+      "title": "Others",
+      "category": "Skills",
+      "subtitle": "",
+      "description": "Git · Jest · Jasmine · Docker · Keycloak · CKAN · Ollama · Zustand · MediaPipe · JWT",
+      "label": "SIDE D / TOOLKIT",
+      "technologies": [
+        "Git",
+        "Jest",
+        "Jasmine",
+        "Docker",
+        "Keycloak",
+        "CKAN",
+        "Ollama",
+        "Zustand",
+        "MediaPipe",
+        "JWT"
+      ]
+    }
+  ],
+  "experience": [
+    {
+      "id": "siemens-sde",
+      "title": "Software Development Engineer",
+      "category": "Experience",
+      "subtitle": "Siemens Technology and Services Private Limited · July 2024 -- Present",
+      "description": "Siemens Technology and Services Private Limited",
+      "label": "CHAPTER III / PRESENT",
+      "date": "July 2024 -- Present",
+      "company": "Siemens Technology and Services Private Limited",
+      "highlights": [
+        "Created a serverless Lambda pipeline in AWS collecting real-time solar energy data across 10 different sites.",
+        "Debugged production issues including deduplication failures, API response bloat, and time-window misalignment.",
+        "Reduced storage consumption and removed API rate-limit exhaustion using ingestion filtering and schedule optimization.",
+        "Extended CKAN 2.10.4 into a customized research-data platform by developing Python/Flask extensions, Jinja2 templates, custom routes, Action APIs, and PostgreSQL/SQLAlchemy integrations.",
+        "Delivered 10+ dataset-management and governance workflows, including bulk resource ingestion, metadata controls, dataset filtering, access management, and organization/group customization.",
+        "Migrated 100K+ records.",
+        "Built bulk data and export workflows supporting up to 25 files / 256 MB per upload and CSV-driven URL ingestion.",
+        "Developed configurable dataset exports using CKAN's package_search API.",
+        "Preserved active filters and exported 18+ metadata fields across datasets, resources, tags, authors, collaborators, and timestamps.",
+        "Developed a CKAN analytics and access-control layer backed by 5 PostgreSQL tables, Flask controllers, SQLAlchemy queries, AJAX filtering, and permission-aware reporting.",
+        "Enabled administrators/contributors to analyze dataset engagement and organization access across 3 time ranges: 1 month, 6 months, 1 year.",
+        "Implemented automated approval/rejection/access-grant notifications for private datasets.",
+        "Implemented metadata governance and discovery enhancements including 6+ dataset filter dimensions: date, ownership, access, role, license, resource format",
+        "Implemented tag-definition enforcement.",
+        "Implemented tag lifecycle management.",
+        "Implemented interactive Data Explorer/geospatial visualization.",
+        "Developed reusable data visualization and geospatial capabilities for CKAN.",
+        "Built an interactive Data Explorer with configurable charting.",
+        "Built a Leaflet-based GeoJSON map viewer with validation, access-control integration, and safe URL/content handling.",
+        "Developed reusable web components / micro frontends including charts, maps, and cards.",
+        "Used Highcharts and Mapbox in Angular 19 and React.",
+        "Packaged components through a private registry to create customizable dashboards.",
+        "Used Keycloak for authentication.",
+        "Supported multiple layout options.",
+        "Wrote test cases in Jest with more than 85% coverage.",
+        "Composed a reusable UI components library in Angular 17 on top of Bootstrap.",
+        "Included form components and modules such as loaders, skeleton loaders, and menu-lists.",
+        "Designed the library to support scalable UI across internal products.",
+        "Implemented a highly customizable Drag-n-Drop Dashboard Builder POC using Micro Frontends in Angular 19 with Gridster.js.",
+        "Supported widgets of different types.",
+        "Integrated layout persistence using local and session storage."
+      ]
+    },
+    {
+      "id": "siemens-intern",
+      "title": "Software Engineering Intern",
+      "category": "Experience",
+      "subtitle": "Siemens Technology and Services Private Limited · January 2024 -- June 2024",
+      "description": "Siemens Technology and Services Private Limited",
+      "label": "CHAPTER II / SIEMENS",
+      "date": "January 2024 -- June 2024",
+      "company": "Siemens Technology and Services Private Limited",
+      "highlights": [
+        "Innovated a GIS-based application built on Angular 17 with Mapbox and Highcharts.",
+        "Developed 5 data-intensive dashboards with dynamic charts.",
+        "Conducted POCs to optimize the use of animation libraries including GSAP, Framer Motion, Three.js, R3f, AOS, etc."
+      ]
+    },
+    {
+      "id": "abhyaz-intern",
+      "title": "Frontend Intern",
+      "category": "Experience",
+      "subtitle": "Abhyaz · December 2022 -- January 2023",
+      "description": "Abhyaz",
+      "label": "CHAPTER I / ABHYAZ",
+      "date": "December 2022 -- January 2023",
+      "company": "Abhyaz",
+      "highlights": [
+        "Restructured and improved the SEO of 3 pages of Abhyaz by 40%.",
+        "Conceptualized and created a new site, CNC Train, using ZOHO editor with another intern in 2 weeks."
+      ]
+    }
+  ],
+  "achievements": [
+    {
+      "id": "rising-star",
+      "title": "Siemens Advanta Rising Star",
+      "category": "Achievements",
+      "subtitle": "Innovation and eagerness to learn",
+      "description": "Awarded with the Siemens Advanta Rising Star award for innovation and eagerness to learn.",
+      "label": "TROPHY CABINET",
+      "kind": "award"
+    },
+    {
+      "id": "technical-writing",
+      "title": "Technical Writing",
+      "category": "Achievements",
+      "subtitle": "LinkedIn · Hashnode · Medium",
+      "description": "Published 30+ tech articles on LinkedIn, Hashnode, and Medium covering DSA and SDE topics, with 10k+ views.",
+      "label": "30+ ARTICLES / 10k+ VIEWS",
+      "kind": "writing",
+      "highlights": [
+        "30+ tech articles",
+        "Published on LinkedIn, Hashnode, and Medium",
+        "Topics: DSA and SDE",
+        "10k+ views"
+      ]
+    },
+    {
+      "id": "core-java",
+      "title": "Core Java",
+      "category": "Achievements",
+      "subtitle": "LinkedIn Learning",
+      "description": "LinkedIn Learning",
+      "label": "CERTIFICATION",
+      "kind": "certification"
+    },
+    {
+      "id": "java-full-stack",
+      "title": "Java Full Stack Course",
+      "category": "Achievements",
+      "subtitle": "TalenNext, Wipro",
+      "description": "TalenNext, Wipro",
+      "label": "CERTIFICATION",
+      "kind": "certification"
+    },
+    {
+      "id": "blockchain-fundamentals",
+      "title": "Blockchain and Cryptocurrency Fundamentals",
+      "category": "Achievements",
+      "subtitle": "University of Michigan · Coursera",
+      "description": "University of Michigan",
+      "label": "CERTIFICATION",
+      "kind": "certification"
+    },
+    {
+      "id": "rust-for-java",
+      "title": "Rust for Java Developers",
+      "category": "Achievements",
+      "subtitle": "LinkedIn Learning",
+      "description": "LinkedIn Learning",
+      "label": "CERTIFICATION",
+      "kind": "certification"
+    },
+    {
+      "id": "rust-essential-training",
+      "title": "Rust Essential Training",
+      "category": "Achievements",
+      "subtitle": "LinkedIn Learning",
+      "description": "LinkedIn Learning",
+      "label": "CERTIFICATION",
+      "kind": "certification"
+    },
+    {
+      "id": "level-up-rust",
+      "title": "Level-Up Rust",
+      "category": "Achievements",
+      "subtitle": "LinkedIn Learning",
+      "description": "LinkedIn Learning",
+      "label": "CERTIFICATION",
+      "kind": "certification"
+    }
+  ],
+  "artwork": {
+    "barcelona": "/artwork/barcelona.png",
+    "westeros": "/artwork/westeros.png",
+    "queen": "/artwork/queen.png",
+    "seedheMaut": "/artwork/seedhe-maut.png"
+  }
+}
